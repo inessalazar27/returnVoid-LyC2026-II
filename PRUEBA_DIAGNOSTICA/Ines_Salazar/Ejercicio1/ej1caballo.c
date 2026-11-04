@@ -110,6 +110,34 @@ static void leer_posicion(char *dest) {
         printf("Posicion invalida. Use columna a-h y fila 1-8.\n");
     }
 }
+/* Opcion 1 , el usuario escribe posicion, n y movimientos; se verifica */
+static void opcion_verificar(void) {
+    char inicio[3], msg[128], entrada[4096], linea[32];
+    int n;
+    printf("\n--- VERIFICAR MOVIMIENTOS ---\n");
+    leer_posicion(inicio);
+
+    for (;;) {
+        printf("Cantidad de movimientos n: ");
+        if (fgets(linea, sizeof linea, stdin) == NULL) return;
+        n = atoi(linea);
+        if (n > 0) break;
+        printf("n debe ser un numero mayor que 0.\n");
+    }
+
+    for (;;) {
+        printf("Escriba los %d movimientos (ej. Kc2 Kd4 Kb3): ", n);
+        if (fgets(entrada, sizeof entrada, stdin) == NULL) return;
+        entrada[strcspn(entrada, "\r\n")] = 0;
+        int real = contar_movimientos(entrada);
+        if (real == n) break;
+        printf("Indico n=%d pero escribio %d movimientos. Intente de nuevo.\n", n, real);
+    }
+
+    validar(inicio, entrada, msg, sizeof msg);
+    printf("\nPara Ak = %s n= %d y C= %s\n", inicio, n, entrada);
+    printf("salida: %s\n", msg);
+}
 int main(void) {
 
     return 0;
