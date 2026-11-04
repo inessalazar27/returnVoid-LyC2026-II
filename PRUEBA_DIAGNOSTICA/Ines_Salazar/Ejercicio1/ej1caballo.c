@@ -14,7 +14,6 @@
 #include <time.h>
 #endif
 /* Cronometro de alta precision (segundos), portable */
-/* Cronometro de alta precision (segundos), portable */
 static double ahora(void) {
 #ifdef _WIN32
     static LARGE_INTEGER frec = {0};          /* la frecuencia se pide una sola vez */
@@ -27,6 +26,17 @@ static double ahora(void) {
     clock_gettime(CLOCK_MONOTONIC, &ts);
     return (double)ts.tv_sec + (double)ts.tv_nsec / 1e9;
 #endif
+}
+/* Copia una cadena en memoria dinamica (strtok modifica el texto).
+   Si no hay memoria, termina el programa con un mensaje. */
+static char *duplicar(const char *s) {
+    char *copia = malloc(strlen(s) + 1);
+    if (copia == NULL) {
+        fprintf(stderr, "Error: sin memoria.\n");
+        exit(EXIT_FAILURE);
+    }
+    strcpy(copia, s);
+    return copia;
 }
 /* Revisa UN movimiento
    col y fila son la posicion actual del caballo; si el movimiento es
@@ -59,6 +69,31 @@ static int revisar(const char *mov, int num, int *col, int *fila, char *msg, siz
     *col = c;
     *fila = f;
     return 1;
+}
+
+/* Revisa una cadena de movimientos. Se detiene en el primer error. */
+static int validar(const char *inicio, const char *cadena, char *msg, size_t sz) {
+    int col = inicio[0] - 'a' + 1;
+    int fila = inicio[1] - '0';
+    char *copia = duplicar(cadena);
+
+    int num = 0, ok = 1;
+    for (char *tok = strtok(copia, " \t\r\n"); tok; tok = strtok(NULL, " \t\r\n")) {
+        num++;
+        if (!revisar(tok, num, &col, &fila, msg, sz)) { ok = 0; break; }
+    }
+    if (ok) snprintf(msg, sz, "movimiento CORRECTO.");
+    free(copia);
+    return ok;
+}
+
+/* Cuenta cuantos movimientos hay en una cadena */
+static int contar_movimientos(const char *cadena) {
+    char *copia = duplicar(cadena);
+    int n = 0;
+    for (char *t = strtok(copia, " \t\r\n"); t; t = strtok(NULL, " \t\r\n")) n++;
+    free(copia);
+    return n;
 }
 int main(void) {
 
