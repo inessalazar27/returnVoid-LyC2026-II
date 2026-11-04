@@ -138,7 +138,87 @@ static void opcion_verificar(void) {
     printf("\nPara Ak = %s n= %d y C= %s\n", inicio, n, entrada);
     printf("salida: %s\n", msg);
 }
-int main(void) {
+/* Opcion 2: medir el tiempo con movimientos.txt */
+static void opcion_medir(void) {
+    char inicio[3], msg[128], linea[32];
+    int reps = 10;
+    printf("\n--- MEDIR TIEMPO (movimientos.txt) ---\n");
+    leer_posicion(inicio);
 
+    printf("Cuantas veces verificar? (Enter = 10): ");
+    if (fgets(linea, sizeof linea, stdin) != NULL && atoi(linea) > 0)
+        reps = atoi(linea);
+
+    /* Cargar el archivo en memoria dinamica */
+    FILE *f = fopen("movimientos.txt", "rb");
+    if (!f) { perror("movimientos.txt"); return; }
+    fseek(f, 0, SEEK_END);
+    long tam = ftell(f);
+    rewind(f);
+    if (tam <= 0) { printf("movimientos.txt esta vacio.\n"); fclose(f); return; }
+    char *cadena = malloc((size_t)tam + 1);
+    if (cadena == NULL) { printf("Sin memoria.\n"); fclose(f); return; }
+    if (fread(cadena, 1, (size_t)tam, f) != (size_t)tam) {
+        printf("Error leyendo movimientos.txt.\n");
+        fclose(f); free(cadena); return;
+    }
+    cadena[tam] = 0;
+    fclose(f);
+
+    int n = contar_movimientos(cadena);
+
+    /* Medir solo la verificacion, 'reps' veces */
+    double *tiempos = malloc((size_t)reps * sizeof(double));
+    if (tiempos == NULL) { printf("Sin memoria.\n"); free(cadena); return; }
+    double total = 0;
+    for (int r = 0; r < reps; r++) {
+        double t0 = ahora();
+        validar(inicio, cadena, msg, sizeof msg);
+        tiempos[r] = ahora() - t0;
+        total += tiempos[r];
+    }
+
+    /* Escribir el resultado en el txt */
+    FILE *out = fopen("resultados_ejercicio1_c.txt", "w");
+    if (out) {
+        fprintf(out, "Lenguaje: C\n");
+        fprintf(out, "Posicion inicial: %s | Movimientos: %d | Resultado: %s\n", inicio, n, msg);
+        for (int r = 0; r < reps; r++)
+            fprintf(out, "Repeticion %d: %.2f microsegundos\n", r + 1, tiempos[r] * 1e6);
+        fprintf(out, "Total %d repeticiones: %.2f microsegundos\n", reps, total * 1e6);
+        fprintf(out, "Promedio: %.2f microsegundos\n", total / reps * 1e6);
+        fclose(out);
+    } else {
+        perror("resultados_ejercicio1_c.txt");
+    }
+
+    /* Mostrar en pantalla */
+    printf("Posicion inicial: %s | Movimientos: %d | Resultado: %s\n", inicio, n, msg);
+    for (int r = 0; r < reps; r++)
+        printf("Repeticion %d: %.2f microsegundos\n", r + 1, tiempos[r] * 1e6);
+    printf("Total %d repeticiones: %.2f microsegundos\n", reps, total * 1e6);
+    printf("Promedio: %.2f microsegundos\n", total / reps * 1e6);
+    if (out) printf("(Guardado en resultados_ejercicio1_c.txt)\n");
+
+    free(tiempos);
+    free(cadena);
+}
+
+int main(void) {
+char linea[16];
+    for (;;) {
+        printf("\n===== CABALLO DE AJEDREZ =====\n");
+        printf("1. Verificar movimientos\n");
+        printf("2. Medir el tiempo\n");
+        printf("0. Salir\n");
+        printf("Opcion: ");
+        if (fgets(linea, sizeof linea, stdin) == NULL) break;
+        switch (linea[0]) {
+            case '1': opcion_verificar(); break;
+            case '2': opcion_medir(); break;
+            case '0': return 0;
+            default: printf("Opcion invalida.\n");
+        }
+    }
     return 0;
 }
