@@ -95,6 +95,21 @@ static int contar_movimientos(const char *cadena) {
     free(copia);
     return n;
 }
+/* Pide la posicion inicial hasta que sea valida */
+static void leer_posicion(char *dest) {
+    char buf[64];
+    for (;;) {
+        printf("Posicion inicial (ej. a2): ");
+        if (fgets(buf, sizeof buf, stdin) == NULL) { strcpy(dest, "a1"); return; }
+        if (buf[0] >= 'A' && buf[0] <= 'H') buf[0] += 32;   /* mayuscula -> minuscula */
+        if (buf[0] >= 'a' && buf[0] <= 'h' && buf[1] >= '1' && buf[1] <= '8' &&
+            (buf[2] == '\n' || buf[2] == '\r' || buf[2] == '\0')) {
+            dest[0] = buf[0]; dest[1] = buf[1]; dest[2] = 0;
+            return;
+        }
+        printf("Posicion invalida. Use columna a-h y fila 1-8.\n");
+    }
+}
 int main(void) {
 
     return 0;
