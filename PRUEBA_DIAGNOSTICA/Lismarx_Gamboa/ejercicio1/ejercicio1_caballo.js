@@ -87,16 +87,15 @@ const movimientoValido = (movimiento) => {
     let movimientoPrevio = null
     for (let index = 0; index < movimiento.length; index++) {
         if (movimientoPrevio) {
-            if ((movimientoPrevio.columna == movimiento[index].columna + 2) || (movimientoPrevio.columna == movimiento[index].columna - 2)) {
-                if ((movimientoPrevio.fila == movimiento[index].fila + 1 )|| (movimientoPrevio.fila == movimiento[index].fila - 1 ) ) {
+            if ((movimientoPrevio.columna == movimiento[index].columna + 2) || (movimientoPrevio.columna == movimiento[index].columna - 2) && ((movimientoPrevio.columna > 0) && (movimientoPrevio.columna < 9))) {
+                if ((movimientoPrevio.fila == movimiento[index].fila + 1 )|| (movimientoPrevio.fila == movimiento[index].fila - 1) && (movimientoPrevio.fila > 0) && (movimientoPrevio.fila < 9)) {
                     console.log("Movimiento valido", movimiento[index])
-                    movimientoPrevio = movimiento[index]
                 } else {
                     console.log("Movimiento invalido", movimiento[index])
                     return 
                 }
-            } else if ((movimientoPrevio.columna == movimiento[index].columna + 1) || (movimientoPrevio.columna == movimiento[index].columna - 1)) {
-                if ((movimientoPrevio.fila == movimiento[index].fila + 2 )|| (movimientoPrevio.fila == movimiento[index].fila - 2 ) ) {
+            } else if ((movimientoPrevio.columna == movimiento[index].columna + 1) || (movimientoPrevio.columna == movimiento[index].columna - 1) && (movimientoPrevio.columna > 0) && (movimientoPrevio.columna < 9)) {
+                if ((movimientoPrevio.fila == movimiento[index].fila + 2 )|| (movimientoPrevio.fila == movimiento[index].fila - 2 ) && (movimientoPrevio.fila > 0) && (movimientoPrevio.fila < 9)) {
                     console.log("Movimiento valido", movimiento[index])
                 } else {
                     console.log("Movimiento invalido", movimiento[index])
@@ -111,12 +110,14 @@ const movimientoValido = (movimiento) => {
     }
 }
 
+
+
+movimientoValido(movimiento1)
+
 const finPrograma = performance.now()
 
 const tiempoTotal = finPrograma - inicioPrograma
-fs.writeFile("./PRUEBA_DIAGNOSTICA/Lismarx_Gamboa/ejercicio1_caballo_js.txt", String(tiempoTotal), (err)=> {
+fs.writeFile("./PRUEBA_DIAGNOSTICA/Lismarx_Gamboa/ejercicio1/ejercicio1_caballo_js.txt",`El programa duró ${String(tiempoTotal)}ms`, (err)=> {
     if (err) throw err
     console.log("Archivo guardado", String(tiempoTotal))
 })
-
-movimientoValido(movimiento1)
