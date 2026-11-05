@@ -42,30 +42,35 @@ static char *duplicar(const char *s) {
    col y fila son la posicion actual del caballo; si el movimiento es
    correcto se actualizan a la nueva casilla. Devuelve 1 si es correcto. */
 static int revisar(const char *mov, int num, int *col, int *fila, char *msg, size_t sz) {
+    char letra = mov[0];
+    if (letra == 'k') letra = 'K';              /* acepta k minuscula */
 
-    if (mov[0] != 'K') {
+    if (letra != 'K') {
         snprintf(msg, sz, "movimiento INCORRECTO falla letra %c no pertenece a un caballo.", mov[0]);
         return 0;
     }
-    
-    if (strlen(mov) != 3 || mov[1] < 'a' || mov[1] > 'h' || mov[2] < '1' || mov[2] > '8') {
+
+    if (strlen(mov) != 3) {
         snprintf(msg, sz, "INCORRECTO falla en el movimiento %d.", num);
         return 0;
     }
-    
-    int c = mov[1] - 'a' + 1;   
-    int f = mov[2] - '0';     
 
-   
-    int dc = abs(c - *col);
-    int df = abs(f - *fila);
+    char cc = mov[1];
+    if (cc >= 'A' && cc <= 'H') cc += 32;       /* acepta columna en mayuscula */
 
-  
-    if (dc * df != 2) {
+    if (cc < 'a' || cc > 'h' || mov[2] < '1' || mov[2] > '8') {
         snprintf(msg, sz, "INCORRECTO falla en el movimiento %d.", num);
         return 0;
     }
-    /* Correcto: el caballo queda en la casilla nueva */
+
+    int c = cc - 'a' + 1;
+    int f = mov[2] - '0';
+
+    if (abs(c - *col) * abs(f - *fila) != 2) {
+        snprintf(msg, sz, "INCORRECTO falla en el movimiento %d.", num);
+        return 0;
+    }
+
     *col = c;
     *fila = f;
     return 1;
@@ -112,7 +117,7 @@ static void leer_posicion(char *dest) {
 }
 /* Opcion 1 , el usuario escribe posicion, n y movimientos; se verifica */
 static void opcion_verificar(void) {
-    char inicio[3], msg[128], entrada[4096], linea[32];
+    char inicio[3], msg[128], entrada[65536], linea[32];
     int n;
     printf("\n--- VERIFICAR MOVIMIENTOS ---\n");
     leer_posicion(inicio);
@@ -126,13 +131,22 @@ static void opcion_verificar(void) {
     }
 
     for (;;) {
-        printf("Escriba los %d movimientos (ej. Kc2 Kd4 Kb3): ", n);
-        if (fgets(entrada, sizeof entrada, stdin) == NULL) return;
-        entrada[strcspn(entrada, "\r\n")] = 0;
-        int real = contar_movimientos(entrada);
-        if (real == n) break;
-        printf("Indico n=%d pero escribio %d movimientos. Intente de nuevo.\n", n, real);
+    printf("Escriba los %d movimientos (ej. Kc2 Kd4 Kb3): ", n);
+    if (fgets(entrada, sizeof entrada, stdin) == NULL) return;
+
+    /* si no hay salto de linea, la entrada no cupo: avisar y limpiar */
+    if (strchr(entrada, '\n') == NULL && !feof(stdin)) {
+        printf("Entrada demasiado larga. Use la opcion 2 con movimientos.txt.\n");
+        int ch;
+        while ((ch = getchar()) != '\n' && ch != EOF) { }
+        continue;
     }
+
+    entrada[strcspn(entrada, "\r\n")] = 0;
+    int real = contar_movimientos(entrada);
+    if (real == n) break;
+    printf("Indico n=%d pero escribio %d movimientos. Intente de nuevo.\n", n, real);
+}
 
     validar(inicio, entrada, msg, sizeof msg);
     printf("\nPara Ak = %s n= %d y C= %s\n", inicio, n, entrada);
