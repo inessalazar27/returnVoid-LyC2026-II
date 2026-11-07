@@ -54,4 +54,25 @@ if __name__ == "__main__":
       ("a1", "Kc2 Kd4 Kf3 Ke5 Kg6 Kh8 Kf7 Kd8 Kc6 Qb4"),
       ("a1", "Kc2 Kd4 Kf3 Ke5 Kg6 Kh8 Kf7 Kd8 Kh6 Kb4"),  
     ]
-    lineas = ["===Ejercicio 1===", "", ]
+    lineas = ["===Ejercicio 1===", "", "Ejemplo:"]
+    for inicio, cadena in ejemplo:
+        n= len(cadena.split())
+        lineas.append(f"Ak = {inicio} n = {n} -> {validar(inicio, cadena)}")
+    ruta = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "movimientos.txt")
+    with open(ruta, encoding="utf-8") as f:
+        secuencia = f.read()
+    movs = secuencia.split()
+    inicio_largo = "a2"  # casilla desde la que Kb4 es un salto válido
+
+    res100, t100 = medir(inicio_largo, " ".join(movs[:100]), 1)
+    resN, tN = medir(inicio_largo, secuencia, 10)
+    lineas += ["",
+        f"n=100 (primeros 100 movimientos, Ak={inicio_largo}): {res100} | tiempo: {t100:.4f} ms",
+        f"Secuencia completa ({len(movs)} movimientos) x 10 veces: {resN} | tiempo: {tN:.4f} ms"]
+
+    texto = "\n".join(lineas)
+    print(texto)
+    salida = os.path.join(os.path.dirname(os.path.abspath(__file__)), "resultados_python.txt")
+    with open(salida, "w", encoding="utf-8") as f:
+        f.write(texto + "\n")
+
