@@ -10,7 +10,9 @@ import time
 def triangulo_pascal(num, x):
     if num >= 0:
         index = 0
+        # el triangulo de pascal inicia con un termino y va incrementandose en uno en cada linea
         cantidad_terminos = 1
+        # se guarda la linea anterior para poder usar la suma de los componentes de su array en la actual
         linea_anterior = []
         resultados = 0
         print(f"exponente {num}")
@@ -19,20 +21,23 @@ def triangulo_pascal(num, x):
             exponente = cantidad_terminos - 1
             exp_iterar = cantidad_terminos - 1
             if not linea_anterior:
-                linea_actual = [1]
+                linea_actual = [1]  # si no hay linea anterior es solo 1
             else:
                 index = 0
                 for t in range(cantidad_terminos):
                     termino = []
                     if index == 0:
                         termino = linea_anterior[index]
+                        # el primer valor siempre es 1
                         linea_actual.append(termino)
                     elif index == cantidad_terminos - 1:
+                        # el ultimo valor siempre es 1
                         termino = linea_anterior[-1]
                         linea_actual.append(termino)
                     else:
                         termino = linea_anterior[index -
                                                  1] + linea_anterior[index]
+                        # los terminos del medio son la suma de los dos terminos arriba de este
                         linea_actual.append(termino)
                     index += 1
 

@@ -142,18 +142,18 @@ const movimiento1 = [
 
 const movimientoValido = (movimiento) => {
     let movimientoPrevio = null
-    for (let index = 0; index < movimiento.length; index++) {
+    for (let index = 0; index < movimiento.length; index++) { //itera por todos los movimientos
         if (movimientoPrevio) {
             if ((movimientoPrevio.columna == movimiento[index].columna + 2) || (movimientoPrevio.columna == movimiento[index].columna - 2) && ((movimientoPrevio.columna > 0) && (movimientoPrevio.columna < 9))) {
                 if ((movimientoPrevio.fila == movimiento[index].fila + 1 )|| (movimientoPrevio.fila == movimiento[index].fila - 1) && (movimientoPrevio.fila > 0) && (movimientoPrevio.fila < 9)) {
-                    console.log("Movimiento valido", movimiento[index])
+                    console.log("Movimiento valido", movimiento[index]) //revisa movimiento en L 
                 } else {
                     console.log("Movimiento invalido", movimiento[index])
                     return 
                 }
             } else if ((movimientoPrevio.columna == movimiento[index].columna + 1) || (movimientoPrevio.columna == movimiento[index].columna - 1) && (movimientoPrevio.columna > 0) && (movimientoPrevio.columna < 9)) {
                 if ((movimientoPrevio.fila == movimiento[index].fila + 2 )|| (movimientoPrevio.fila == movimiento[index].fila - 2 ) && (movimientoPrevio.fila > 0) && (movimientoPrevio.fila < 9)) {
-                    console.log("Movimiento valido", movimiento[index])
+                    console.log("Movimiento valido", movimiento[index]) //revisa movimiento en L
                 } else {
                     console.log("Movimiento invalido", movimiento[index])
                     return 
@@ -163,7 +163,7 @@ const movimientoValido = (movimiento) => {
                     return 
                 }
         } 
-        movimientoPrevio = movimiento[index]
+        movimientoPrevio = movimiento[index] //guarda el movimiento actual como movimiento previo para compararlo en la siguiente iteracion
     }
 }
 
