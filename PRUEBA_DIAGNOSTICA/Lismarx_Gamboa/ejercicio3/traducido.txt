@@ -15,7 +15,7 @@
 
 #define BASE 1000000000u
 
-/* Entero grande, c no tiene enteros tan grandes como los coeficientes */
+/* Entero grande, c no tiene enteros tan grandes como los coeficientes entonces se crea una estructura para guardar numeros grandes */
 definir_tipo estructura
 {
     entero sign;    /* 1 o -1 (el cero usa n = 0) */

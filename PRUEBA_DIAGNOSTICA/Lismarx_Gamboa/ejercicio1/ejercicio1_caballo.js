@@ -3,12 +3,12 @@ const inicioPrograma = performance.now()
 
 const  a = 1, b = 2, c = 3, d = 4, e = 5, f = 6, g = 7, h = 8
 
-/*const movimiento1 = [
-    { columna: c, fila: 2 }, 
-    { columna: d, fila: 4 },
-    { columna: b, fila: 3 },
-    { columna: c, fila: 5 },
-]*/
+/*
+Para un tablero de ajedrez denotado por filas [1,2,3,4,5,6,7,8] y columnas [a,b,c,d,e,f,g,h] donde se
+encuentra solo un caballo. Escriba un código que dado la posición inicial del caballo Ak y una cadena C que
+denota n movimiento indique si los movimientos son correctos o existe uno de ellos que no lo es el código se
+para al encontrar el primer movimiento incorrecto. Considere que la posición de un movimiento de caballo se
+denota con “K” (caballo notación ingles) para indicar que es un caballo acompañado de la columna y la final*/
 
 const movimiento1 = [
   { columna: b, fila: 4 }, { columna: a, fila: 6 }, { columna: c, fila: 5 }, { columna: a, fila: 4 },
