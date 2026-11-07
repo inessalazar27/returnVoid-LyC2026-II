@@ -1,1 +1,0 @@
-El programa duró 7.389399999999998ms

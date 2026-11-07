@@ -1,0 +1,406 @@
+/*
+ * Dado un numero entero no negativo n:
+ *   a) genera los coeficientes del polinomio (x+1)^n y muestra el resultado
+ *   b) muestra por pasos el calculo de f(x) = (x+1)^n para un x dado
+ * Se usa el triangulo de Pascal y memoria dinamica (malloc / free).
+ *
+ * Como para n=100 los numeros no caben en long long, se implementa un
+ * entero grande (BigInt) con limbs de base 10^9 almacenados en memoria dinamica.
+ */
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdint.h>
+#include <time.h>
+
+#define BASE 1000000000u
+
+/* Entero grande, c no tiene enteros tan grandes como los coeficientes */
+definir_tipo estructura
+{
+    entero sign;    /* 1 o -1 (el cero usa n = 0) */
+    entero n;       /* cantidad de limbs usados */
+    uint32_t *d; /* limbs, el menos significativo primero */
+} Big;
+
+estatico vacio *reservar(size_t bytes)
+{
+    vacio *p = malloc(bytes ? bytes : 1);
+    si (p == NULL)
+    {
+        fprintf(stderr, "Error: no hay memoria suficiente\n");
+        exit(1);
+    }
+    retornar p;
+}
+
+estatico Big big_nuevo(entero capacidad)
+{
+    Big b;
+    b.sign = 1;
+    b.n = 0;
+    b.d = (uint32_t *)reservar(capacidad * tamano_de(uint32_t));
+    retornar b;
+}
+
+estatico vacio big_liberar(Big *b)
+{
+    free(b->d);
+    b->d = NULL;
+    b->n = 0;
+}
+
+estatico vacio big_recortar(Big *b)
+{
+    mientras (b->n > 0 && b->d[b->n - 1] == 0)
+        b->n--;
+    si (b->n == 0)
+        b->sign = 1;
+}
+
+estatico Big big_desde_ll(largo largo v)
+{
+    Big b = big_nuevo(3);
+    sin_signo largo largo m;
+    si (v < 0)
+    {
+        b.sign = -1;
+        m = (sin_signo largo largo)(-(v + 1)) + 1ULL;
+    }
+    sino
+        m = (sin_signo largo largo)v;
+    mientras (m > 0)
+    {
+        b.d[b.n++] = (uint32_t)(m % BASE);
+        m /= BASE;
+    }
+    big_recortar(&b);
+    retornar b;
+}
+
+estatico Big big_copiar(constante Big *a)
+{
+    Big b = big_nuevo(a->n > 0 ? a->n : 1);
+    memcpy(b.d, a->d, a->n * tamano_de(uint32_t));
+    b.n = a->n;
+    b.sign = a->sign;
+    retornar b;
+}
+
+estatico entero cmp_mag(constante Big *a, constante Big *b)
+{
+    si (a->n != b->n)
+        retornar a->n > b->n ? 1 : -1;
+    para (entero i = a->n - 1; i >= 0; i--)
+        si (a->d[i] != b->d[i])
+            retornar a->d[i] > b->d[i] ? 1 : -1;
+    retornar 0;
+}
+
+estatico Big add_mag(constante Big *a, constante Big *b)
+{
+    entero max = a->n > b->n ? a->n : b->n;
+    Big r = big_nuevo(max + 1);
+    uint32_t carry = 0;
+    para (entero i = 0; i < max; i++)
+    {
+        uint64_t s = (uint64_t)carry;
+        si (i < a->n)
+            s += a->d[i];
+        si (i < b->n)
+            s += b->d[i];
+        r.d[i] = (uint32_t)(s % BASE);
+        carry = (uint32_t)(s / BASE);
+    }
+    r.n = max;
+    si (carry)
+        r.d[r.n++] = carry;
+    retornar r;
+}
+
+/* |a| >= |b| */
+estatico Big sub_mag(constante Big *a, constante Big *b)
+{
+    Big r = big_nuevo(a->n);
+    int64_t prestamo = 0;
+    para (entero i = 0; i < a->n; i++)
+    {
+        int64_t s = (int64_t)a->d[i] - prestamo - (i < b->n ? (int64_t)b->d[i] : 0);
+        si (s < 0)
+        {
+            s += BASE;
+            prestamo = 1;
+        }
+        sino
+            prestamo = 0;
+        r.d[i] = (uint32_t)s;
+    }
+    r.n = a->n;
+    big_recortar(&r);
+    retornar r;
+}
+
+estatico Big big_sumar(constante Big *a, constante Big *b)
+{
+    Big r;
+    si (a->sign == b->sign)
+    {
+        r = add_mag(a, b);
+        r.sign = a->sign;
+    }
+    sino
+    {
+        entero c = cmp_mag(a, b);
+        si (c == 0)
+        {
+            r = big_nuevo(1);
+        }
+        sino si (c > 0)
+        {
+            r = sub_mag(a, b);
+            r.sign = a->sign;
+        }
+        sino
+        {
+            r = sub_mag(b, a);
+            r.sign = b->sign;
+        }
+    }
+    big_recortar(&r);
+    retornar r;
+}
+
+estatico Big big_multiplicar(constante Big *a, constante Big *b)
+{
+    si (a->n == 0 || b->n == 0)
+        retornar big_nuevo(1);
+    Big r = big_nuevo(a->n + b->n);
+    memset(r.d, 0, (a->n + b->n) * tamano_de(uint32_t));
+    r.n = a->n + b->n;
+    para (entero i = 0; i < a->n; i++)
+    {
+        uint64_t carry = 0;
+        para (entero j = 0; j < b->n || carry; j++)
+        {
+            uint64_t cur = r.d[i + j] + carry;
+            si (j < b->n)
+                cur += (uint64_t)a->d[i] * b->d[j];
+            r.d[i + j] = (uint32_t)(cur % BASE);
+            carry = cur / BASE;
+        }
+    }
+    r.sign = a->sign * b->sign;
+    big_recortar(&r);
+    retornar r;
+}
+
+/* base^exp con exp >= 0 */
+estatico Big big_potencia(constante Big *base, entero exp)
+{
+    Big r = big_desde_ll(1);
+    para (entero i = 0; i < exp; i++)
+    {
+        Big t = big_multiplicar(&r, base);
+        big_liberar(&r);
+        r = t;
+    }
+    retornar r;
+}
+
+estatico entero big_mayor_que_1(constante Big *a)
+{
+    retornar a->sign > 0 && (a->n > 1 || (a->n == 1 && a->d[0] > 1));
+}
+
+estatico vacio big_imprimir(constante Big *a)
+{
+    si (a->n == 0)
+    {
+        printf("0");
+        retornar;
+    }
+    si (a->sign < 0)
+        printf("-");
+    printf("%u", a->d[a->n - 1]);
+    para (entero i = a->n - 2; i >= 0; i--)
+        printf("%09u", a->d[i]);
+}
+
+vacio triangulo_pascal(entero num, largo largo x)
+{
+    si (num < 0)
+    {
+        printf("El numero no puede ser menor a 0\n");
+        retornar;
+    }
+
+    entero cantidad_terminos = 1;
+    Big *linea_anterior = NULL; /* equivale a linea_anterior = [] */
+    Big *linea_actual = NULL;
+    entero cant_anterior = 0;
+    Big resultados = big_desde_ll(0);
+    Big big_x = big_desde_ll(x);
+
+    printf("exponente %d\n", num);
+
+    para (entero n = 0; n <= num; n++)
+    {
+        linea_actual = (Big *)reservar(cantidad_terminos * tamano_de(Big));
+        entero exponente = cantidad_terminos - 1;
+        entero exp_iterar = cantidad_terminos - 1;
+
+        si (linea_anterior == NULL)
+        {
+            linea_actual[0] = big_desde_ll(1);
+        }
+        sino
+        {
+            entero index = 0;
+            para (entero t = 0; t < cantidad_terminos; t++)
+            {
+                si (index == 0)
+                    linea_actual[index] = big_copiar(&linea_anterior[0]);
+                sino si (index == cantidad_terminos - 1)
+                    linea_actual[index] = big_copiar(&linea_anterior[cant_anterior - 1]);
+                sino
+                    linea_actual[index] = big_sumar(&linea_anterior[index - 1], &linea_anterior[index]);
+                index++;
+            }
+            /* liberar la linea anterior */
+            para (entero t = 0; t < cant_anterior; t++)
+                big_liberar(&linea_anterior[t]);
+            free(linea_anterior);
+        }
+
+        linea_anterior = linea_actual;
+        cant_anterior = cantidad_terminos;
+
+        /* Mostrar el polinomio de esta linea */
+        para (entero t = 0; t < cantidad_terminos; t++)
+        {
+            si (exp_iterar > 0)
+            {
+                si (big_mayor_que_1(&linea_actual[t]))
+                    big_imprimir(&linea_actual[t]);
+                printf("x^%d + ", exp_iterar);
+                exp_iterar--;
+            }
+            sino
+            {
+                big_imprimir(&linea_actual[t]);
+                printf("\n");
+            }
+        }
+
+        /* Evaluar solo la ultima linea */
+        si (cantidad_terminos == num + 1 || num == 0)
+        {
+            printf("Evaluar [");
+            para (entero t = 0; t < cantidad_terminos; t++)
+            {
+                big_imprimir(&linea_actual[t]);
+                si (t < cantidad_terminos - 1)
+                    printf(", ");
+            }
+            printf("]\n");
+
+            para (entero t = 0; t < cantidad_terminos; t++)
+            {
+                Big termino;
+                si (exponente > 0)
+                {
+                    Big pot = big_potencia(&big_x, exponente);
+                    termino = big_multiplicar(&linea_actual[t], &pot);
+                    big_liberar(&pot);
+
+                    printf("operacion ");
+                    big_imprimir(&linea_actual[t]);
+                    printf("*%lld^%d = ", x, exponente);
+                    big_imprimir(&termino);
+                    printf("\n");
+                    exponente--;
+                }
+                sino
+                {
+                    termino = big_copiar(&linea_actual[t]);
+                    printf("operacion ");
+                    big_imprimir(&linea_actual[t]);
+                    printf(" = ");
+                    big_imprimir(&termino);
+                    printf("\n");
+                }
+                Big nuevo = big_sumar(&resultados, &termino);
+                big_liberar(&resultados);
+                resultados = nuevo;
+                big_liberar(&termino);
+            }
+            printf("Resultado Final: ");
+            big_imprimir(&resultados);
+            printf("\n");
+        }
+
+        cantidad_terminos++;
+    }
+
+    /* Liberar la ultima linea y el resto de memoria */
+    para (entero t = 0; t < cant_anterior; t++)
+        big_liberar(&linea_anterior[t]);
+    free(linea_anterior);
+    big_liberar(&resultados);
+    big_liberar(&big_x);
+}
+
+/* Lee un entero desde teclado; devuelve 1 si es valido, 0 si no */
+entero leer_entero(constante caracter *mensaje, largo largo *valor)
+{
+    caracter buffer[64];
+    caracter *fin;
+
+    printf("%s", mensaje);
+    si (fgets(buffer, tamano_de(buffer), stdin) == NULL)
+        retornar 0;
+
+    *valor = strtoll(buffer, &fin, 10);
+    si (fin == buffer)
+        retornar 0;
+    mientras (*fin == ' ' || *fin == '\n' || *fin == '\r')
+        fin++;
+    si (*fin != '\0')
+        retornar 0;
+
+    printf("%lld\n", *valor);
+    retornar 1;
+}
+
+entero main(vacio)
+{
+    estructura timespec inicio, fin;
+    timespec_get(&inicio, TIME_UTC);
+
+    entero seguir = 1;
+    mientras (seguir)
+    {
+        largo largo exponente, valor_x;
+
+        si (!leer_entero("Ingrese el numero del exponente para evaluar el triangulo de pascal: ", &exponente))
+        {
+            printf("Error, numero no valido\n");
+            continuar;
+        }
+
+        si (!leer_entero("Ingrese el valor de x para evaluar el triangulo de pascal: ", &valor_x))
+        {
+            printf("Error, numero no valido\n");
+            continuar;
+        }
+
+        triangulo_pascal((entero)exponente, valor_x);
+        seguir = 0;
+    }
+
+    timespec_get(&fin, TIME_UTC);
+    doble tiempo = (fin.tv_sec - inicio.tv_sec) + (fin.tv_nsec - inicio.tv_nsec) / 1e9;
+    printf("Tiempo de ejecucion del programa: %fs\n", tiempo);
+
+    retornar 0;
+}

@@ -15,7 +15,7 @@
 
 #define BASE 1000000000u
 
-/* ===================== Entero grande ===================== */
+/* Entero grande, c no tiene enteros tan grandes como los coeficientes */
 typedef struct
 {
     int sign;    /* 1 o -1 (el cero usa n = 0) */
@@ -226,7 +226,6 @@ static void big_imprimir(const Big *a)
         printf("%09u", a->d[i]);
 }
 
-/* ===================== Triangulo de Pascal ===================== */
 void triangulo_pascal(int num, long long x)
 {
     if (num < 0)
@@ -293,7 +292,7 @@ void triangulo_pascal(int num, long long x)
             }
         }
 
-        /* Evaluar solo la ultima linea (la del exponente pedido) */
+        /* Evaluar solo la ultima linea */
         if (cantidad_terminos == num + 1 || num == 0)
         {
             printf("Evaluar [");
