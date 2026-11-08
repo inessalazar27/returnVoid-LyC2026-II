@@ -30,4 +30,26 @@ void imprimir(numero n)
     }
 }
 
+/*arreglo de punteros*/
+numero **armarTriangulo(int n)
+{
+    numero **tri = malloc((n+1)*sizeof(numero *));
+    for(int i=0; i<=n;i++){
+        tri[i]=malloc((i+1)*sizeof(numero));
+        tri[i][0]=1;
+        tri[i][i];
+        for(int j=1; j<i; j++){
+            tri[i][j]= tri[i-1][j-1]+ tri[i-1][j];
+        }
+    }
+    return tri;
+}
+
+void liberarTriangulo(numero **tri, int n){
+    for(int i=0; i<=n; i++){
+        free(tri[i]);
+    }
+    free(tri);
+}
+
 
