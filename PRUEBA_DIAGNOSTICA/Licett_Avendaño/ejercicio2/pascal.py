@@ -13,3 +13,16 @@ def armarTriengulo(n):
         triangulo.append(fila)
     return triangulo
 
+def polinomio(fila):
+    n=len(fila)-1
+    partes=[]
+    for k in range(n, -1,-1):
+        coeficiente=fila[k]
+        if k==0:
+            partes.append(str(coeficiente))
+        else:
+            texto = "" if coeficiente==1 else str(coeficiente)
+            texto+= "x" if k==1 else "x^"+str(k)
+            partes.append(texto)
+    return " + ".join(partes)
+
