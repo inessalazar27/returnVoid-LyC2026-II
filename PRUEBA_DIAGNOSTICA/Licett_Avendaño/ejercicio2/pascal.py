@@ -26,3 +26,28 @@ def polinomio(fila):
             partes.append(texto)
     return " + ".join(partes)
 
+def parentesis(valor):
+    if valor < 0:
+        return "(" + str(valor) + ")"
+    return str(valor)
+
+def mostrarPasos(fila, x):
+    n=len(fila)-1
+    paso1=[]
+    paso2=[]
+    paso3=[]
+    suma=0
+    for k in range(n,-1,-1):
+        potencia=1
+        for _ in range(k):
+            potencia=potencia*x
+        termino = fila[k]*potencia
+        paso1.append(str(fila[k])+ "*" + parentesis(x)+"^"+str(k))
+        paso2.append(str(fila[k]) + "*"+parentesis(potencia))
+        paso3.append(parentesis(termino))
+        suma=suma+termino
+    print("f(x) =", " + ".join(paso1))
+    print("     =", " + ".join(paso2))
+    print("     =", " + ".join(paso3))
+    print("     =", suma)
+    return suma
