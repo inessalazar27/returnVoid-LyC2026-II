@@ -51,3 +51,41 @@ def mostrarPasos(fila, x):
     print("     =", " + ".join(paso3))
     print("     =", suma)
     return suma
+
+def tiempo100(repeticiones):
+    inicio = time.perf_counter()
+    for _ in range(repeticiones):
+        triangulo(100)
+    fin = time.perf_counter()
+    return fin - inicio
+ 
+ 
+# ---------------- programa principal ----------------
+n = int(input("Valor de n (entero >= 0): "))
+x = int(input("Valor de x: "))
+ 
+if n < 0:
+    print("n no puee ser negativo")
+    raise SystemExit
+ 
+triangulo = armarTriengulo(n)
+ 
+if n <= 10:
+    print("\nTriangulo de Pascal:")
+    for fila in triangulo:
+        print(" ".join(str(c) for c in fila).center(60))
+ 
+print("\nCoeficientes (n =", str(n) + "):", *triangulo[n])
+print("(x+1)^" + str(n), "=", polinomio(triangulo[n]))
+ 
+print("\nCalculo paso a paso para x =", x)
+resultado = mostrarPasos(triangulo[n], x)
+print("Comprobacion con (x+1)^n directo:", (x + 1) ** n)
+ 
+veces = 1000
+total = tiempo100(veces)
+print("\n--- Tiempo para generar n=100 (Python) ---")
+print("Repeticiones:", veces)
+print("Tiempo total:", round(total * 1000, 3), "ms")
+print("Tiempo por generacion:", round(total / veces * 1000, 4), "ms")
+ 
