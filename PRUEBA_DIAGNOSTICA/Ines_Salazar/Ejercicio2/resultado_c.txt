@@ -122,4 +122,4 @@ Paso 101: 1 * (1)^0 = 1
 f(1) = 1.2676506e+030
 Verificacion (x+1)^n = 1.2676506e+030
 
-Tiempo C n=100: 0.000020000 segundos (promedio de 1000 corridas)
+Tiempo C n=100: 0.000018000 segundos (promedio de 1000 corridas)
