@@ -1,0 +1,15 @@
+===Ejercicio 1===
+
+Ejemplo:
+Ak = a1 n = 4 -> el movimiento es correcto
+Ak = a1 n = 4 -> ERROR falla en el moviemiento 3
+Ak = a2 n = 5 -> el movimiento es correcto
+Ak = a2 n = 5 -> ERROR falla en el moviemiento 1
+Ak = a8 n = 2 -> el movimiento es correcto
+Ak = a8 n = 2 -> ERROR falla en el moviemiento 2
+Ak = a1 n = 10 -> el movimiento es correcto
+Ak = a1 n = 10 -> movimiento incorrecto la letra Q no es un caballo
+Ak = a1 n = 10 -> ERROR falla en el moviemiento 9
+
+n=100 (primeros 100 movimientos, Ak=a2): el movimiento es correcto | tiempo: 0.4185 ms
+Secuencia completa (500 movimientos) x 10 veces: el movimiento es correcto | tiempo: 27.1376 ms

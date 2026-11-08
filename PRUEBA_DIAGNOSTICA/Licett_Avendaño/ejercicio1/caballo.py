@@ -27,7 +27,7 @@ def validar(inicio, cadena):
         return f"ERROR: la posicion inicial {inicio} no existe"
     movimientos=cadena.split()
     for i, mov in enumerate(movimientos, start=1):
-        if mov[0] != "k":
+        if mov[0] != "K":
             return f"movimiento incorrecto la letra {mov[0]} no es un caballo"
         final = coordenadas(mov[1:])
         if final is None or not esMovimientoValido(pos, final):
@@ -58,7 +58,7 @@ if __name__ == "__main__":
     for inicio, cadena in ejemplo:
         n= len(cadena.split())
         lineas.append(f"Ak = {inicio} n = {n} -> {validar(inicio, cadena)}")
-    ruta = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "movimientos.txt")
+    ruta = os.path.join(os.path.dirname(os.path.abspath(__file__)), "movimientos.txt")
     with open(ruta, encoding="utf-8") as f:
         secuencia = f.read()
     movs = secuencia.split()
@@ -75,4 +75,4 @@ if __name__ == "__main__":
     salida = os.path.join(os.path.dirname(os.path.abspath(__file__)), "resultados_python.txt")
     with open(salida, "w", encoding="utf-8") as f:
         f.write(texto + "\n")
-
+ 
