@@ -1,0 +1,61 @@
+=== REPORTE EJERCICIO 3 (LENGUAJE C) ===
+
+--- 1. CODIGO ORIGINAL ---
+#include <stdio.h>
+
+// Funcion que calcula una suma
+int calcular(int limite) {
+    int suma = 0;
+    for (int i = 0; i < limite; i++) {
+        if (i == 5) {
+            continue;
+        } else {
+            suma += i;
+        }
+    }
+    return suma;
+}
+
+int main() {
+    double resultado = (double)calcular(10);
+    while (resultado > 0) {
+        break;
+    }
+    return 0;
+}
+
+--- 2. PALABRAS TRADUCIDAS ---
+* 'break' -> 'romper' (Apariciones: 1)
+* 'continue' -> 'continuar' (Apariciones: 1)
+* 'double' -> 'doble' (Apariciones: 2)
+* 'else' -> 'sino' (Apariciones: 1)
+* 'for' -> 'para' (Apariciones: 1)
+* 'if' -> 'si' (Apariciones: 1)
+* 'int' -> 'entero' (Apariciones: 5)
+* 'return' -> 'retornar' (Apariciones: 2)
+* 'while' -> 'mientras' (Apariciones: 1)
+
+--- 3. CODIGO TRADUCIDO ---
+#include <stdio.h>
+
+// Funcion que calcula una suma
+entero calcular(entero limite) {
+    entero suma = 0;
+    para (entero i = 0; i < limite; i++) {
+        si (i == 5) {
+            continuar;
+        } sino {
+            suma += i;
+        }
+    }
+    retornar suma;
+}
+
+entero main() {
+    doble resultado = (doble)calcular(10);
+    mientras (resultado > 0) {
+        romper;
+    }
+    retornar 0;
+}
+

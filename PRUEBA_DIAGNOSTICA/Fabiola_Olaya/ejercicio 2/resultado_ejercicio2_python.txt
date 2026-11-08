@@ -1,0 +1,27 @@
+
+=== Ejecucion: 2026-11-06 21:52:10 ===
+====================================================
+   EJERCICIO 2 - TRIANGULO DE PASCAL EN PYTHON      
+====================================================
+Ingrese un numero entero no negativo n (ej. 4 o 5): Ingrese el valor de x para evaluar f(x) = (x+1)^4 (ej. 2): 
+--- Triangulo de Pascal hasta n = 4 (Memoria Dinamica) ---
+(n = 0): 1
+(n = 1): 1 1
+(n = 2): 1 2 1
+(n = 3): 1 3 3 1
+(n = 4): 1 4 6 4 1
+
+--- a) Resultado del Polinomio (x+1)^4 ---
+(x+1)^4 = x^4 + 4x^3 + 6x^2 + 4x + 1
+
+--- b) Calculo paso a paso para x = 2 en f(x) = (x+1)^4 ---
+Paso 1 (Sustitucion):  f(2) = 1*(2^4) + 4*(2^3) + 6*(2^2) + 4*(2) + 1
+Paso 2 (Potencias):    f(2) = 1*(16) + 4*(8) + 6*(4) + 4*(2) + 1
+Paso 3 (Productos):    f(2) = 16 + 32 + 24 + 8 + 1
+Paso 4 (Resultado):    f(2) = 81
+
+====================================================
+   MEDICION DE TIEMPO PARA n = 100 (PYTHON)         
+====================================================
+Polinomio generado (x+1)^100: x^100 + 100x^99 + 4950x^98 + ... + 100x + 1
+Tiempo en generar n = 100 en Python: 0.00318180 segundos (3181.800 microsegundos)
