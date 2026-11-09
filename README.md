@@ -59,7 +59,7 @@ Cada carpeta de producto incluye:
 
 | Producto | Estado |
 |---|---|
-| **Prueba diagnóstica** | Entregado |
+| **Prueba diagnóstica** | Entregados |
 | **Tema 1** | Pendiente |
 | **Tema 2** | Pendiente |
 | **Tema 3** | Pendiente |
