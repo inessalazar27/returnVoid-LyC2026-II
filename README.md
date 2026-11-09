@@ -11,7 +11,7 @@ Aquí vamos a ir subiendo las tareas y actividades de la materia Lenguajes y Com
 | **Vicerrectorado** | Académico |
 | **Coordinación** | Ingeniería en Informática |
 | **Asignatura** | Lenguajes y Compiladores |
-| **Profesor** | Ing. Félix Márquez |
+| **Profesor** | Ing. Félix Márquez |s
 | **Periodo** | 2026-II |
 
 ## **Integrantes**
@@ -59,7 +59,7 @@ Cada carpeta de producto incluye:
 
 | Producto | Estado |
 |---|---|
-| **Prueba diagnóstica** | Pendiente |
+| **Prueba diagnóstica** | Entregado |
 | **Tema 1** | Pendiente |
 | **Tema 2** | Pendiente |
 | **Tema 3** | Pendiente |
