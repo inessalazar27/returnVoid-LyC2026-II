@@ -53,6 +53,8 @@ if __name__ == "__main__":
       ("a1", "Kc2 Kd4 Kf3 Ke5 Kg6 Kh8 Kf7 Kd8 Kc6 Kb4"),
       ("a1", "Kc2 Kd4 Kf3 Ke5 Kg6 Kh8 Kf7 Kd8 Kc6 Qb4"),
       ("a1", "Kc2 Kd4 Kf3 Ke5 Kg6 Kh8 Kf7 Kd8 Kh6 Kb4"),  
+      ("a2", "Kb4 Ka6 Kc5 Kc6"),
+      ("a2", "Kb4 Ka6 Qc5"),
     ]
     lineas = ["===Ejercicio 1===", "", "Ejemplo:"]
     for inicio, cadena in ejemplo:
