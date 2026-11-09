@@ -1,7 +1,7 @@
 # Ejercicio 2 - Triangulo de Pascal
 import time
 
-def armarTriengulo(n):
+def armarTriangulo(n):
     triangulo=[] #guarda todas las filas de 0 a n 
     for i in range(n+1):
         fila=[]
@@ -55,20 +55,19 @@ def mostrarPasos(fila, x):
 def tiempo100(repeticiones):
     inicio = time.perf_counter()
     for _ in range(repeticiones):
-        triangulo(100)
+        armarTriangulo(100)
     fin = time.perf_counter()
     return fin - inicio
  
  
 # ---------------- programa principal ----------------
 n = int(input("Valor de n (entero >= 0): "))
-x = int(input("Valor de x: "))
- 
 if n < 0:
-    print("n no puee ser negativo")
+    print("n no puede ser negativo")
     raise SystemExit
- 
-triangulo = armarTriengulo(n)
+x = int(input("Valor de x: "))
+
+triangulo = armarTriangulo(n)
  
 if n <= 10:
     print("\nTriangulo de Pascal:")

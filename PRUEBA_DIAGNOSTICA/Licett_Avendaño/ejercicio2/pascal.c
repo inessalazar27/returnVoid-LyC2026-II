@@ -37,7 +37,7 @@ numero **armarTriangulo(int n)
     for(int i=0; i<=n;i++){
         tri[i]=malloc((i+1)*sizeof(numero));
         tri[i][0]=1;
-        tri[i][i];
+        tri[i][i]=1;
         for(int j=1; j<i; j++){
             tri[i][j]= tri[i-1][j-1]+ tri[i-1][j];
         }
@@ -105,12 +105,19 @@ int mostrarPasos(numero *fila, int n, unsigned int x){
         printf("*%u^%d", x, k);
         if (k>0) printf(" + ");
     }
-    printf("\n      =");
+    printf("\n     = ");
+    for(int k=n; k>=0; k--){
+        imprimir(fila[k]);
+        printf("*");
+        imprimir(potencia[k]);
+        if (k>0) printf(" + ");
+    }
+    printf("\n     = ");
     for(int k=n; k>=0; k--){
         imprimir(termino[k]);
         if (k>0) printf(" + ");
     }
-    printf("\n        =");
+    printf("\n     = ");
     imprimir(suma);
     printf("\n");
     free(potencia);
@@ -121,8 +128,16 @@ int mostrarPasos(numero *fila, int n, unsigned int x){
 int main(void){
     int n;
     unsigned int x;
-    printf("valor de n (entero >0, maximoo %d): ",  N_MAXIMO);
-    scanf("%u", &x);
+    printf("valor de n (entero >=0, maximo %d): ",  N_MAXIMO);
+    if (scanf("%d", &n) != 1) {
+        printf("entrada invalida\n");
+        return 1;
+    }
+    printf("valor de x (entero >=0): ");
+    if (scanf("%u", &x) != 1) {
+        printf("entrada invalida\n");
+        return 1;
+    }
 
     if (n < 0 || n > N_MAXIMO) {
         printf("n fuera de rango\n");
