@@ -1,0 +1,49 @@
+#include <stdio.h>
+
+/* while y return dentro de un comentario no se traducen */
+definir_tipo estructura {
+    entero id;
+    sin_signo entero edad;
+} Persona;
+
+estatico constante entero LIMITE = 3;
+
+entero sumar(entero a, entero b)
+{
+    retornar a + b;   // return en comentario de linea
+}
+
+entero main(vacio)
+{
+    entero whileX = 0, retorno_for = 5;      /* nombres que contienen palabras reservadas */
+    caracter letra = 'a';
+    Persona p = {1, 20};
+
+    printf("while y return en un texto no cambian\n");
+    printf("sizeof(int) = %d, comilla \" y for\n", (entero)tamano_de(entero));
+
+    para (entero i = 0; i < LIMITE; i++) {
+        si (i == 1) {
+            continuar;
+        } sino {
+            whileX = sumar(whileX, i);
+        }
+    }
+
+    mientras (retorno_for > 0) {
+        retorno_for--;
+    }
+
+    segun (letra) {
+        caso 'a':
+            romper;
+        defecto:
+            romper;
+    }
+
+    hacer {
+        p.edad++;
+    } mientras (p.edad < 0x1F);
+
+    retornar 0;
+}
