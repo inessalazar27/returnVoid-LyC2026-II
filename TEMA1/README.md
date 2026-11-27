@@ -51,4 +51,4 @@ python test_limites.py --guardar             # casos límite + reporte_limites.m
 python verificar_equivalencia.py             # AFN vs AFD vs regex
 ```
 
-Los diagramas se regeneran con Graphviz: `dot -Tpng diagramas/afd.dot -o diagramas/afd.png` (igual con `afn`).
+Los diagramas se regeneran con Graphviz: `dot -Tpng diagramas/afd.dot -o diagramas/afd.png`.
