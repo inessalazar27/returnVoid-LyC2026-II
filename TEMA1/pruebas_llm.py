@@ -5,7 +5,7 @@ Parte 3 del reto (Integrante 3).
 
 Flujo:
   1. Toma las etiquetas de salidas_llm.py.
-  2. Las pasa una por una por el motor del AFD (afd_validador.py).
+  2. Las pasa una por una por el motor del AFD (validadorADF.py).
   3. Compara el resultado con la regla formal.
   4. Opcional: toma las correcciones que propuso el LLM y las revalida.
 
@@ -16,6 +16,7 @@ Uso:
     python pruebas_llm.py --json
     python pruebas_llm.py --sin-correccion
     python pruebas_llm.py --verbose
+    python pruebas_llm.py --guardar resultados_llm.json
 
 Codigo de salida: 0 si todos los casos coinciden con lo esperado, 1 si no.
 """
@@ -23,8 +24,10 @@ Codigo de salida: 0 si todos los casos coinciden con lo esperado, 1 si no.
 from __future__ import annotations
 
 import argparse
+import importlib
 import json
 import sys
+import unicodedata
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -40,36 +43,55 @@ ANCHO_MOTIVO = 64
 # ---------------------------------------------------------------------------
 # Motor del AFD (Integrante 2)
 # ---------------------------------------------------------------------------
-# Contrato acordado:
-#     validar(cadena) -> (True, "")            si la etiqueta cumple la regla
-#     validar(cadena) -> (False, "motivo...")  si no la cumple
+# El motor vive en validadorADF.py y expone:
+#     validarEtiqueta(cadena) -> {
+#         "valida": bool,
+#         "motivo": str,
+#         "estado_final": str,
+#         ...
+#     }
 #
-# Si afd_validador.py todavia no existe, se usa un STUB local solo para poder
-# desarrollar y demostrar el script. El reporte avisa cuando se usa el stub.
+# Ese archivo NO se modifica: solo se importa. Si todavia no existe, se usa un
+# STUB local solo para poder desarrollar y demostrar el script. El reporte
+# avisa cuando se usa el stub.
 
-try:
-    import afd_validador
-except ModuleNotFoundError as exc:
-    if exc.name != "afd_validador":
-        raise
-    afd_validador = None
+MODULOS_MOTOR = ("validadorADF", "afd_validador")
+FUNCIONES_MOTOR = (
+    "validarEtiqueta",
+    "validar_etiqueta",
+    "validar_cadena",
+    "validar",
+)
 
-if afd_validador is None:
-    _validar_motor = None
-    MOTOR = "STUB local (no se encontro afd_validador.py)"
-else:
-    _validar_motor = None
-    for _nombre in ("validar", "validar_cadena", "validar_etiqueta"):
-        _validar_motor = getattr(afd_validador, _nombre, None)
-        if _validar_motor is not None:
-            break
-    if _validar_motor is None:
+
+def _cargar_motor():
+    """Busca el motor del AFD entre los archivos conocidos del equipo."""
+    modulos_encontrados: list[str] = []
+
+    for nombre_modulo in MODULOS_MOTOR:
+        try:
+            modulo = importlib.import_module(nombre_modulo)
+        except ModuleNotFoundError as exc:
+            if exc.name != nombre_modulo:
+                raise
+            continue
+
+        modulos_encontrados.append(nombre_modulo)
+        for nombre_funcion in FUNCIONES_MOTOR:
+            funcion = getattr(modulo, nombre_funcion, None)
+            if callable(funcion):
+                return funcion, f"{nombre_modulo}.py -> {nombre_funcion}()"
+
+    if modulos_encontrados:
         raise SystemExit(
-            "afd_validador.py no expone ninguna de estas funciones: "
-            "validar, validar_cadena, validar_etiqueta.\n"
-            "Acuerda el nombre con el Integrante 2 o agrega el alias en el import."
+            "Se encontro " + ", ".join(modulos_encontrados) + " pero no expone "
+            "ninguna de estas funciones: " + ", ".join(FUNCIONES_MOTOR) + ".\n"
+            "Revisa el nombre con el Integrante 2 o agrega el alias aqui."
         )
-    MOTOR = f"afd_validador.py -> {_validar_motor.__name__}()"
+    return None, "STUB local (no se encontro el motor del AFD)"
+
+
+_validar_motor, MOTOR = _cargar_motor()
 
 
 # ---------------------------------------------------------------------------
@@ -97,8 +119,27 @@ def visible(cadena: str) -> str:
 
 
 def _ascii(texto: str) -> str:
-    """Evita que un motivo con caracteres raros rompa la consola."""
-    return texto.encode("ascii", "backslashreplace").decode("ascii")
+    """Version ASCII para consolas Windows: quita tildes y escapa el resto."""
+    normalizado = unicodedata.normalize("NFKD", texto)
+    sin_marcas = "".join(
+        caracter for caracter in normalizado if not unicodedata.combining(caracter)
+    )
+    reemplazos = {"\n": "\\n", "\r": "\\r", "\t": "\\t"}
+    plano = "".join(reemplazos.get(caracter, caracter) for caracter in sin_marcas)
+    return plano.encode("ascii", "backslashreplace").decode("ascii")
+
+
+def _motivo_visible(motivo: str, cadena: str) -> str:
+    """Escapa el caracter citado por el AFD y deja el resto del motivo en ASCII.
+
+    El motor cita el caracter problematico entre comillas: 'carácter '{c}''.
+    Si {c} no es ASCII, se muestra como \\uXXXX en lugar de perderlo al quitar
+    las tildes del mensaje.
+    """
+    for caracter in cadena:
+        if ord(caracter) > 127:
+            motivo = motivo.replace(f"'{caracter}'", f"'{visible(caracter)}'")
+    return _ascii(motivo)
 
 
 def _normalizar(resultado) -> tuple[bool | None, str]:
@@ -141,7 +182,7 @@ def _stub(cadena: str) -> tuple[bool, str]:
         q3  final, leyo el digito
 
     Cualquier transicion no definida rechaza (estado de rechazo implicito).
-    Este stub no sustituye a afd_validador.py.
+    Este stub no sustituye a validadorADF.py.
     """
     estado = "q0"
     for posicion, caracter in enumerate(cadena):
@@ -239,7 +280,7 @@ def _imprimir_cabecera() -> None:
     print("=" * 66)
     if _validar_motor is None:
         print()
-        print(" AVISO: no se encontro afd_validador.py; se usa el STUB local.")
+        print(" AVISO: no se encontro el motor del AFD; se usa el STUB local.")
         print("        Esto sirve para desarrollar, NO cuenta como prueba del")
         print("        motor del Integrante 2.")
 
@@ -255,7 +296,7 @@ def _imprimir_tabla(resultados: list[Resultado]) -> None:
             obtenido = "acepta" if resultado.aceptada else "rechaza"
 
         motivo = "" if resultado.aceptada else (resultado.motivo or "-")
-        motivo = _ascii(motivo)
+        motivo = _motivo_visible(motivo, resultado.cadena)
         if len(motivo) > ANCHO_MOTIVO:
             motivo = motivo[: ANCHO_MOTIVO - 3] + "..."
 
@@ -335,7 +376,7 @@ def _imprimir_resumen(resultados: list[Resultado], correcciones: list[dict]) -> 
                 f"{visible(fila['corregida']):<{ancho_corregida}} {estado}"
             )
             if fila["aceptada"] is not True and fila["motivo"]:
-                print(f"      motivo: {_ascii(fila['motivo'])}")
+                print(f"      motivo: {_motivo_visible(fila['motivo'], fila['corregida'])}")
         print(f"  Correcciones aceptadas: {correctas}/{len(correcciones)}")
 
 
@@ -347,6 +388,20 @@ def _imprimir_notas(resultados: list[Resultado]) -> None:
     print("POR QUE LOS CASOS AMBIGUOS SON TRAMPA")
     for resultado in ambiguas:
         print(f"  {visible(resultado.cadena):<14} {_ascii(resultado.nota)}")
+
+
+def _imprimir_detalle_rechazos(resultados: list[Resultado]) -> None:
+    rechazados = [r for r in resultados if r.aceptada is False]
+    if not rechazados:
+        return
+    ancho = max(len(visible(r.cadena)) for r in rechazados)
+    print()
+    print("DETALLE DE RECHAZOS (motivo completo del AFD)")
+    for resultado in rechazados:
+        print(
+            f"  {visible(resultado.cadena):<{ancho}}  "
+            f"{_motivo_visible(resultado.motivo, resultado.cadena)}"
+        )
 
 
 # ---------------------------------------------------------------------------
@@ -422,13 +477,18 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="explica por que los casos ambiguos son trampa",
     )
+    parser.add_argument(
+        "--guardar",
+        metavar="ARCHIVO",
+        help="guarda el reporte JSON en ARCHIVO (UTF-8) para el Integrante 4",
+    )
     args = parser.parse_args(argv)
 
     resultados = ejecutar_casos()
     correcciones = [] if args.sin_correccion else ejecutar_correcciones()
+    reporte = _reporte_json(resultados, correcciones)
 
     if args.json:
-        reporte = _reporte_json(resultados, correcciones)
         print(json.dumps(reporte, ensure_ascii=True, indent=2))
     else:
         _imprimir_cabecera()
@@ -436,6 +496,16 @@ def main(argv: list[str] | None = None) -> int:
         _imprimir_resumen(resultados, correcciones)
         if args.verbose:
             _imprimir_notas(resultados)
+            _imprimir_detalle_rechazos(resultados)
+
+    if args.guardar:
+        ruta = Path(args.guardar)
+        ruta.parent.mkdir(parents=True, exist_ok=True)
+        ruta.write_text(
+            json.dumps(reporte, ensure_ascii=False, indent=2),
+            encoding="utf-8",
+        )
+        print(f"Reporte JSON guardado en: {ruta}", file=sys.stderr)
 
     return 0 if all(r.ok for r in resultados) else 1
 
