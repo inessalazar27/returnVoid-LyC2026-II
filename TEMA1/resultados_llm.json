@@ -1,0 +1,402 @@
+{
+  "motor": "validadorADF.py -> validarEtiqueta()",
+  "usando_stub": false,
+  "regla": "[A-Z][a-z]+[0-9]",
+  "resumen": {
+    "total": 24,
+    "aceptadas": 6,
+    "rechazadas": 18,
+    "errores_motor": 0,
+    "coincidencias": 24,
+    "correcciones_total": 18,
+    "correcciones_aceptadas": 18
+  },
+  "casos": [
+    {
+      "cadena": "Get1",
+      "visible": "Get1",
+      "categoria": "valida",
+      "esperado": "acepta",
+      "obtenido": "acepta",
+      "coincide": true,
+      "motivo": "Aceptada: cumple con la regla formal [A-Z][a-z]+[0-9].",
+      "nota": "Caso base del enunciado"
+    },
+    {
+      "cadena": "Run2",
+      "visible": "Run2",
+      "categoria": "valida",
+      "esperado": "acepta",
+      "obtenido": "acepta",
+      "coincide": true,
+      "motivo": "Aceptada: cumple con la regla formal [A-Z][a-z]+[0-9].",
+      "nota": "Caso base del enunciado"
+    },
+    {
+      "cadena": "Read9",
+      "visible": "Read9",
+      "categoria": "valida",
+      "esperado": "acepta",
+      "obtenido": "acepta",
+      "coincide": true,
+      "motivo": "Aceptada: cumple con la regla formal [A-Z][a-z]+[0-9].",
+      "nota": "Caso base del enunciado"
+    },
+    {
+      "cadena": "Zz9",
+      "visible": "Zz9",
+      "categoria": "valida",
+      "esperado": "acepta",
+      "obtenido": "acepta",
+      "coincide": true,
+      "motivo": "Aceptada: cumple con la regla formal [A-Z][a-z]+[0-9].",
+      "nota": "Frontera del alfabeto: Z y z"
+    },
+    {
+      "cadena": "Get0",
+      "visible": "Get0",
+      "categoria": "valida",
+      "esperado": "acepta",
+      "obtenido": "acepta",
+      "coincide": true,
+      "motivo": "Aceptada: cumple con la regla formal [A-Z][a-z]+[0-9].",
+      "nota": "Frontera del digito: 0 tambien vale"
+    },
+    {
+      "cadena": "Ab1",
+      "visible": "Ab1",
+      "categoria": "valida",
+      "esperado": "acepta",
+      "obtenido": "acepta",
+      "coincide": true,
+      "motivo": "Aceptada: cumple con la regla formal [A-Z][a-z]+[0-9].",
+      "nota": "Etiqueta valida mas corta posible"
+    },
+    {
+      "cadena": "get1",
+      "visible": "get1",
+      "categoria": "invalida",
+      "esperado": "rechaza",
+      "obtenido": "rechaza",
+      "coincide": true,
+      "motivo": "Rechazada en estado 'q0' al leer el carácter 'g' (posición 0). Se esperaba una letra mayuscula al inicio.",
+      "nota": "Empieza con minuscula"
+    },
+    {
+      "cadena": "Get",
+      "visible": "Get",
+      "categoria": "invalida",
+      "esperado": "rechaza",
+      "obtenido": "rechaza",
+      "coincide": true,
+      "motivo": "Rechazada al finalizar la lectura en estado 'q2'. Cadena incompleta: falta el dígito final obligatorio",
+      "nota": "Sin digito final"
+    },
+    {
+      "cadena": "Get12",
+      "visible": "Get12",
+      "categoria": "invalida",
+      "esperado": "rechaza",
+      "obtenido": "rechaza",
+      "coincide": true,
+      "motivo": "Rechazada en estado 'q3' al leer el carácter '2' (posición 4). La etiqueta ya había terminado con un digito; no se permiten más caracteres",
+      "nota": "Dos digitos al final"
+    },
+    {
+      "cadena": "Get_1",
+      "visible": "Get_1",
+      "categoria": "invalida",
+      "esperado": "rechaza",
+      "obtenido": "rechaza",
+      "coincide": true,
+      "motivo": "Rechazada en estado 'q2' al leer el carácter '_' (posición 3). Se esperaba otra letra minuscula o un unico dígito final (0-9).",
+      "nota": "Guion bajo fuera del alfabeto"
+    },
+    {
+      "cadena": "G1",
+      "visible": "G1",
+      "categoria": "invalida",
+      "esperado": "rechaza",
+      "obtenido": "rechaza",
+      "coincide": true,
+      "motivo": "Rechazada en estado 'q1' al leer el carácter '1' (posición 1). Se esperaba al menos una letra minúscula (a-z) después de la mayuscula inicial.",
+      "nota": "Falta al menos una minuscula"
+    },
+    {
+      "cadena": "GET1",
+      "visible": "GET1",
+      "categoria": "invalida",
+      "esperado": "rechaza",
+      "obtenido": "rechaza",
+      "coincide": true,
+      "motivo": "Rechazada en estado 'q1' al leer el carácter 'E' (posición 1). Se esperaba al menos una letra minúscula (a-z) después de la mayuscula inicial.",
+      "nota": "Mayusculas donde van minusculas"
+    },
+    {
+      "cadena": "",
+      "visible": "(vacia)",
+      "categoria": "invalida",
+      "esperado": "rechaza",
+      "obtenido": "rechaza",
+      "coincide": true,
+      "motivo": "Rechazada al finalizar la lectura en estado 'q0'. Cadena vacia: falta la mayuscula inicial, las minusculas y el digito final.",
+      "nota": "Cadena vacia"
+    },
+    {
+      "cadena": "Ñandú1",
+      "visible": "\\u00d1and\\u00fa1",
+      "categoria": "invalida",
+      "esperado": "rechaza",
+      "obtenido": "rechaza",
+      "coincide": true,
+      "motivo": "Rechazada en estado 'q0' al leer el carácter 'Ñ' (posición 0). Se esperaba una letra mayuscula al inicio.",
+      "nota": "Ñ y ú fuera de A-Z / a-z"
+    },
+    {
+      "cadena": "A1",
+      "visible": "A1",
+      "categoria": "ambigua",
+      "esperado": "rechaza",
+      "obtenido": "rechaza",
+      "coincide": true,
+      "motivo": "Rechazada en estado 'q1' al leer el carácter '1' (posición 1). Se esperaba al menos una letra minúscula (a-z) después de la mayuscula inicial.",
+      "nota": "Parece corta y valida, pero no tiene minusculas"
+    },
+    {
+      "cadena": " Get1",
+      "visible": "\\u0020Get1",
+      "categoria": "ambigua",
+      "esperado": "rechaza",
+      "obtenido": "rechaza",
+      "coincide": true,
+      "motivo": "Rechazada en estado 'q0' al leer el carácter ' ' (posición 0). Se esperaba una letra mayuscula al inicio.",
+      "nota": "Espacio inicial: un strip() la aceptaria por error"
+    },
+    {
+      "cadena": "Get1 ",
+      "visible": "Get1\\u0020",
+      "categoria": "ambigua",
+      "esperado": "rechaza",
+      "obtenido": "rechaza",
+      "coincide": true,
+      "motivo": "Rechazada en estado 'q3' al leer el carácter ' ' (posición 4). La etiqueta ya había terminado con un digito; no se permiten más caracteres",
+      "nota": "Espacio final: un strip() la aceptaria por error"
+    },
+    {
+      "cadena": "Get 1",
+      "visible": "Get 1",
+      "categoria": "ambigua",
+      "esperado": "rechaza",
+      "obtenido": "rechaza",
+      "coincide": true,
+      "motivo": "Rechazada en estado 'q2' al leer el carácter ' ' (posición 3). Se esperaba otra letra minuscula o un unico dígito final (0-9).",
+      "nota": "Espacio interno entre letras y digito"
+    },
+    {
+      "cadena": "Get1x",
+      "visible": "Get1x",
+      "categoria": "ambigua",
+      "esperado": "rechaza",
+      "obtenido": "rechaza",
+      "coincide": true,
+      "motivo": "Rechazada en estado 'q3' al leer el carácter 'x' (posición 4). La etiqueta ya había terminado con un digito; no se permiten más caracteres",
+      "nota": "Caracter despues del digito final"
+    },
+    {
+      "cadena": "Get01",
+      "visible": "Get01",
+      "categoria": "ambigua",
+      "esperado": "rechaza",
+      "obtenido": "rechaza",
+      "coincide": true,
+      "motivo": "Rechazada en estado 'q3' al leer el carácter '1' (posición 4). La etiqueta ya había terminado con un digito; no se permiten más caracteres",
+      "nota": "Dos digitos: el 0 inicial engana"
+    },
+    {
+      "cadena": "Get١",
+      "visible": "Get\\u0661",
+      "categoria": "ambigua",
+      "esperado": "rechaza",
+      "obtenido": "rechaza",
+      "coincide": true,
+      "motivo": "Rechazada en estado 'q2' al leer el carácter '١' (posición 3). Se esperaba otra letra minuscula o un unico dígito final (0-9).",
+      "nota": "Digito arabe-indico: isdigit() lo acepta, la regla no"
+    },
+    {
+      "cadena": "Get1\n",
+      "visible": "Get1\\n",
+      "categoria": "ambigua",
+      "esperado": "rechaza",
+      "obtenido": "rechaza",
+      "coincide": true,
+      "motivo": "Rechazada en estado 'q3' al leer el carácter '\n' (posición 4). La etiqueta ya había terminado con un digito; no se permiten más caracteres",
+      "nota": "Salto de linea al final"
+    },
+    {
+      "cadena": "Get1.",
+      "visible": "Get1.",
+      "categoria": "ambigua",
+      "esperado": "rechaza",
+      "obtenido": "rechaza",
+      "coincide": true,
+      "motivo": "Rechazada en estado 'q3' al leer el carácter '.' (posición 4). La etiqueta ya había terminado con un digito; no se permiten más caracteres",
+      "nota": "Punto final"
+    },
+    {
+      "cadena": "Gét1",
+      "visible": "G\\u00e9t1",
+      "categoria": "ambigua",
+      "esperado": "rechaza",
+      "obtenido": "rechaza",
+      "coincide": true,
+      "motivo": "Rechazada en estado 'q1' al leer el carácter 'é' (posición 1). Se esperaba al menos una letra minúscula (a-z) después de la mayuscula inicial.",
+      "nota": "e acentuada: isalpha() la acepta, la regla no"
+    }
+  ],
+  "correcciones": [
+    {
+      "original": "get1",
+      "original_visible": "get1",
+      "corregida": "Get1",
+      "corregida_visible": "Get1",
+      "aceptada": true,
+      "motivo": "Aceptada: cumple con la regla formal [A-Z][a-z]+[0-9]."
+    },
+    {
+      "original": "Get",
+      "original_visible": "Get",
+      "corregida": "Get1",
+      "corregida_visible": "Get1",
+      "aceptada": true,
+      "motivo": "Aceptada: cumple con la regla formal [A-Z][a-z]+[0-9]."
+    },
+    {
+      "original": "Get12",
+      "original_visible": "Get12",
+      "corregida": "Get1",
+      "corregida_visible": "Get1",
+      "aceptada": true,
+      "motivo": "Aceptada: cumple con la regla formal [A-Z][a-z]+[0-9]."
+    },
+    {
+      "original": "Get_1",
+      "original_visible": "Get_1",
+      "corregida": "Get1",
+      "corregida_visible": "Get1",
+      "aceptada": true,
+      "motivo": "Aceptada: cumple con la regla formal [A-Z][a-z]+[0-9]."
+    },
+    {
+      "original": "G1",
+      "original_visible": "G1",
+      "corregida": "Ga1",
+      "corregida_visible": "Ga1",
+      "aceptada": true,
+      "motivo": "Aceptada: cumple con la regla formal [A-Z][a-z]+[0-9]."
+    },
+    {
+      "original": "GET1",
+      "original_visible": "GET1",
+      "corregida": "Get1",
+      "corregida_visible": "Get1",
+      "aceptada": true,
+      "motivo": "Aceptada: cumple con la regla formal [A-Z][a-z]+[0-9]."
+    },
+    {
+      "original": "",
+      "original_visible": "(vacia)",
+      "corregida": "Get1",
+      "corregida_visible": "Get1",
+      "aceptada": true,
+      "motivo": "Aceptada: cumple con la regla formal [A-Z][a-z]+[0-9]."
+    },
+    {
+      "original": "Ñandú1",
+      "original_visible": "\\u00d1and\\u00fa1",
+      "corregida": "Nandu1",
+      "corregida_visible": "Nandu1",
+      "aceptada": true,
+      "motivo": "Aceptada: cumple con la regla formal [A-Z][a-z]+[0-9]."
+    },
+    {
+      "original": "A1",
+      "original_visible": "A1",
+      "corregida": "Ab1",
+      "corregida_visible": "Ab1",
+      "aceptada": true,
+      "motivo": "Aceptada: cumple con la regla formal [A-Z][a-z]+[0-9]."
+    },
+    {
+      "original": " Get1",
+      "original_visible": "\\u0020Get1",
+      "corregida": "Get1",
+      "corregida_visible": "Get1",
+      "aceptada": true,
+      "motivo": "Aceptada: cumple con la regla formal [A-Z][a-z]+[0-9]."
+    },
+    {
+      "original": "Get1 ",
+      "original_visible": "Get1\\u0020",
+      "corregida": "Get1",
+      "corregida_visible": "Get1",
+      "aceptada": true,
+      "motivo": "Aceptada: cumple con la regla formal [A-Z][a-z]+[0-9]."
+    },
+    {
+      "original": "Get 1",
+      "original_visible": "Get 1",
+      "corregida": "Get1",
+      "corregida_visible": "Get1",
+      "aceptada": true,
+      "motivo": "Aceptada: cumple con la regla formal [A-Z][a-z]+[0-9]."
+    },
+    {
+      "original": "Get1x",
+      "original_visible": "Get1x",
+      "corregida": "Get1",
+      "corregida_visible": "Get1",
+      "aceptada": true,
+      "motivo": "Aceptada: cumple con la regla formal [A-Z][a-z]+[0-9]."
+    },
+    {
+      "original": "Get01",
+      "original_visible": "Get01",
+      "corregida": "Get1",
+      "corregida_visible": "Get1",
+      "aceptada": true,
+      "motivo": "Aceptada: cumple con la regla formal [A-Z][a-z]+[0-9]."
+    },
+    {
+      "original": "Get١",
+      "original_visible": "Get\\u0661",
+      "corregida": "Get1",
+      "corregida_visible": "Get1",
+      "aceptada": true,
+      "motivo": "Aceptada: cumple con la regla formal [A-Z][a-z]+[0-9]."
+    },
+    {
+      "original": "Get1\n",
+      "original_visible": "Get1\\n",
+      "corregida": "Get1",
+      "corregida_visible": "Get1",
+      "aceptada": true,
+      "motivo": "Aceptada: cumple con la regla formal [A-Z][a-z]+[0-9]."
+    },
+    {
+      "original": "Get1.",
+      "original_visible": "Get1.",
+      "corregida": "Get1",
+      "corregida_visible": "Get1",
+      "aceptada": true,
+      "motivo": "Aceptada: cumple con la regla formal [A-Z][a-z]+[0-9]."
+    },
+    {
+      "original": "Gét1",
+      "original_visible": "G\\u00e9t1",
+      "corregida": "Get1",
+      "corregida_visible": "Get1",
+      "aceptada": true,
+      "motivo": "Aceptada: cumple con la regla formal [A-Z][a-z]+[0-9]."
+    }
+  ]
+}

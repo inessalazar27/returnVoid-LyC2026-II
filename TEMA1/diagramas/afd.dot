@@ -1,0 +1,21 @@
+digraph AFD {
+  rankdir=LR; fontname="Helvetica"; labelloc=t;
+  label="AFD equivalente (construcción de subconjuntos)   M = mayúscula, m = minúscula, d = dígito, o = otro";
+  node [shape=circle, fontname="Helvetica", fontsize=13];
+  edge [fontname="Helvetica", fontsize=13];
+  __i [shape=point, width=0.01]; __i -> A;
+  A [label="{q0}\n(q0)"];
+  B [label="{q1}\n(q1)"];
+  C [label="{q1,q2}\n(q2)"];
+  D [label="{q3}\n(q3)", shape=doublecircle];
+  E [label="∅\n(q_err)", style=filled, fillcolor="#eeeeee"];
+  A -> B [label="M"];
+  B -> C [label="m"];
+  C -> C [label="m"];
+  C -> D [label="d"];
+  A -> E [label="m, d, o", style=dashed];
+  B -> E [label="M, d, o", style=dashed];
+  C -> E [label="M, o", style=dashed];
+  D -> E [label="M, m, d, o", style=dashed];
+  E -> E [label="M, m, d, o", style=dashed];
+}

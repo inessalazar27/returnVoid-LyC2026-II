@@ -30,6 +30,8 @@ import sys
 import unicodedata
 from dataclasses import dataclass
 from pathlib import Path
+import sys
+sys.stdout.reconfigure(encoding="utf-8")
 
 _DIRECTORIO = Path(__file__).resolve().parent
 if str(_DIRECTORIO) not in sys.path:

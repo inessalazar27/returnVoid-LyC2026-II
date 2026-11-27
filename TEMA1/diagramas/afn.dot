@@ -1,0 +1,12 @@
+digraph AFN {
+  rankdir=LR; fontname="Helvetica"; labelloc=t;
+  label="AFN del reto: [A-Z][a-z]+[0-9]   (M = mayúscula, m = minúscula, d = dígito)";
+  node [shape=circle, fontname="Helvetica", fontsize=14];
+  edge [fontname="Helvetica", fontsize=13];
+  __i [shape=point, width=0.01]; __i -> q0;
+  q3 [shape=doublecircle];
+  q0 -> q1 [label="M"];
+  q1 -> q1 [label="m"];
+  q1 -> q2 [label="m", color="#c0392b", fontcolor="#c0392b", penwidth=2];
+  q2 -> q3 [label="d"];
+}
