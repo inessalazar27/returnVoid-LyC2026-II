@@ -2,7 +2,7 @@
 
 Equipo **return void;** · Lenguajes y Compiladores · UNEG 2026-II
 
-**Eslogan:** [escribir el eslogan del grupo]
+**Eslogan:** `// nada que devolver, todo por compilar`
 
 ## Integrantes
 
@@ -15,9 +15,9 @@ Equipo **return void;** · Lenguajes y Compiladores · UNEG 2026-II
 
 | Entregable | Ubicación |
 |---|---|
-| Informe de investigación (APA) | `Informe_AFD_AFN_Tema1_final.docx` |
-| Presentación de apoyo | `Presentacion_Tema1.pptx` |
-| Video de defensa | [pegar enlace de Drive] |
+| Informe de investigación (APA) | `Informe-AFDyAFNTema1final.pdf` |
+| Presentación de apoyo | `Autómatas Finitos AFD y AFN -materialVideo.pdf` |
+| Video de defensa | videoTema1.md |
 | Código del reto evaluado | Archivos `.py` de esta carpeta |
 
 ## Reto evaluado
