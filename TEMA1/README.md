@@ -2,6 +2,24 @@
 
 Equipo **return void;** · Lenguajes y Compiladores · UNEG 2026-II
 
+**Eslogan:** [escribir el eslogan del grupo]
+
+## Integrantes
+
+- Ines Salazar, C.I. 31.701.669, Sección 1
+- Licett Avendaño, C.I. 18.886.013, Sección 1
+- Lismarx Gamboa, C.I. 30.994.146, Sección 1
+- Fabiola Olaya, C.I. 31.869.294, Sección 3
+
+## Entregables
+
+| Entregable | Ubicación |
+|---|---|
+| Informe de investigación (APA) | `Informe_AFD_AFN_Tema1_final.docx` |
+| Presentación de apoyo | `Presentacion_Tema1.pptx` |
+| Video de defensa | [pegar enlace de Drive] |
+| Código del reto evaluado | Archivos `.py` de esta carpeta |
+
 ## Reto evaluado
 
 Validador de etiquetas generadas por un LLM mediante un AFD en Python.
@@ -17,8 +35,8 @@ Regla formal: `[A-Z][a-z]+[0-9]` (válidas: `Get1`, `Run2`, `Read9`).
 | `test_limites.py` | 20 casos límite contra el motor real. |
 | `verificar_equivalencia.py` | Comprueba que AFN, AFD y regex son equivalentes. |
 | `diagramas/` | Diagramas del AFN y del AFD (`.png` y fuente `.dot`). |
-| `seccion_AFN_AFD.md` | Tablas de transición y conversión AFN → AFD. |
-| `seccion_RETO_EVALUADO.md` | Sección del informe sobre el reto. |
+| `resultados_llm.json`, `reporte_limites.md` | Reportes generados por los scripts. |
+| `borradores/` | Textos de trabajo del equipo (no son entregables). |
 
 ## Cómo correrlo
 
